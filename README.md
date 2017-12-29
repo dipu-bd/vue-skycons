@@ -20,7 +20,7 @@ import VueSkycons from 'vue-skycons'
 Vue.use(VueSkycons)
 
 // or pass the color option
-Vue.use(VueSkycons, { color: 'pink' })
+Vue.use(VueSkycons, { color: 'orangered' })
 ```
 
 ## Usage
@@ -28,19 +28,19 @@ Vue.use(VueSkycons, { color: 'pink' })
 <template>
   <div>
     <!-- General usage -->
-    <skycon clear />
-    <skycon clear night />
-    <skycon partly-cloudy />
-    <skycon partly-cloudy night />
-    <skycon cloudy />
-    <skycon rain />
-    <skycon sleet />
-    <skycon snow />
-    <skycon wind />
-    <skycon fog />
+    <skycon condition="clear-day" />
+    <skycon condition="clear-night" />
+    <skycon condition="partly-cloudy-day" />
+    <skycon condition="partly-cloudy-night" />
+    <skycon condition="cloudy" />
+    <skycon condition="rain" />
+    <skycon condition="sleet" />
+    <skycon condition="snow" />
+    <skycon condition="wind" />
+    <skycon condition="fog" />
 
     <!-- Width and height -->
-    <skycon clear width="256" height="256" />
+    <skycon condition="rain" width="256" height="256" />
   </div>
 </template>
 ```
@@ -58,44 +58,10 @@ Vue.use(VueSkycons, { color: 'pink' })
     default: 64
   },
 
-  // Day or night
-  night: {
-    type: Boolean,
-    default: false
-  },
-
-  // Weather conditions
-  clear: {
-    type: Boolean,
-    default: false
-  },
-  partlyCloudy: {
-    type: Boolean,
-    default: false
-  },
-  cloudy: {
-    type: Boolean,
-    default: false
-  },
-  rain: {
-    type: Boolean,
-    default: false
-  },
-  sleet: {
-    type: Boolean,
-    default: false
-  },
-  snow: {
-    type: Boolean,
-    default: false
-  },
-  wind: {
-    type: Boolean,
-    default: false
-  },
-  fog: {
-    type: Boolean,
-    default: false
+  // Weather condition
+  condition: {
+    type: String,
+    default: null
   }
 ```
 
