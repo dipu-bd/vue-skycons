@@ -1,6 +1,6 @@
 {
   "name": "vue-skycons",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Skycons components in VueJS",
   "main": "index.js",
   "scripts": {
