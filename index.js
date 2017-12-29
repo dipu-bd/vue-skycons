@@ -1,12 +1,13 @@
+var Skycons = require('./skycons');
+
 module.exports.install = function (Vue, options) {
   // initialize skycons
-  require('./skycons')
-  var skycons = new Skycons({ color: options.color || 'black' });
+  var skycons = new Skycons(options || {});
   skycons.play();
 
   // register component
   Vue.component('skycon', {
-    template: `<canvas ref="canvas" :width="width" :height="height"></canvas>`,
+    template: '<canvas ref="canvas" :width="width" :height="height"></canvas>',
     props: {
       // Icon size
       width: {
@@ -58,11 +59,11 @@ module.exports.install = function (Vue, options) {
         default: false
       }
     },
-    mounted() {
+    mounted: function() {
       skycons.set(this.$refs.canvas, Skycons[this.type]);
     },
     computed: {
-      type() {
+      type: function() {
         if(this.clear) return 'CLEAR' + (this.night ? '_NIGHT' : '_DAY')
         if(this.partlyCloudy) return 'PARTLY_CLOUDY' + (this.night ? '_NIGHT' : '_DAY')
         if(this.cloudy) return 'CLOUDY';
