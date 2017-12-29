@@ -1,0 +1,26 @@
+{
+  "name": "vue-skycons",
+  "version": "1.0.0",
+  "description": "Skycons components in VueJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dipu-bd/skycons.git"
+  },
+  "keywords": [
+    "skycons",
+    "weather",
+    "vue",
+    "icons",
+    "animated"
+  ],
+  "author": "Sudipto Chandra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dipu-bd/skycons/issues"
+  },
+  "homepage": "https://github.com/dipu-bd/skycons#readme"
+}
