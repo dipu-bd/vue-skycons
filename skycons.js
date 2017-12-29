@@ -4,7 +4,6 @@
   * GREAT JUSTICE. */
 var requestInterval, cancelInterval;
 
-
 (function() {
   var global = window;
 
