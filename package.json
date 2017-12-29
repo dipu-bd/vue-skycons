@@ -4,7 +4,9 @@
   "description": "Skycons components in VueJS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "patch": "npm version patch --no-git-tag-version && git add package.json && git commit -m 'Update version:patch' && git push origin master && npm publish",
+    "minor": "npm version minor --no-git-tag-version && git add package.json && git commit -m 'Update version:minor' && git push origin master && npm publish",
+    "major": "npm version major --no-git-tag-version && git add package.json && git commit -m 'Update version:major' && git push origin master && npm publish"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,7 @@
     "icons",
     "animated"
   ],
-  "author": "Sudipto Chandra",
+  "author": "Sudipto Chandra <dipu.sudipta@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dipu-bd/skycons/issues"
