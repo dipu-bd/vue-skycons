@@ -8,21 +8,23 @@ module.exports.install = function (Vue, options) {
   Vue.component('skycon', {
     template: `<canvas ref="canvas" :width="width" :height="height"></canvas>`,
     props: {
+      // Icon size
       width: {
         type: Number,
-        default: 128
+        default: 64
       },
-  
       height: {
         type: Number,
-        default: 128
+        default: 64
       },
 
+      // Day or night
       night: {
         type: Boolean,
         default: false
       },
 
+      // Weather conditions
       clear: {
         type: Boolean,
         default: false
