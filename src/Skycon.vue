@@ -1,5 +1,5 @@
 <template>
-  <canvas :width="width" :height="height"></canvas>
+  <canvas :width="width" :height="height" :data-condition="condition"></canvas>
 </template>
 
 <script>
@@ -24,26 +24,26 @@ export default {
     // Weather condition
     condition: {
       type: String,
-      required: true,
+      required: true
     },
 
     // Icon size
     size: {
       type: [Number, String],
-      default: 64,
+      default: 64
     },
 
     // Icon color
     color: {
       type: String,
-      default: "black",
+      default: "black"
     },
 
     // Start with paused animation
     paused: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
     width() {
@@ -54,13 +54,13 @@ export default {
     },
     icon() {
       return this.condition.toUpperCase().replace(/[\s.-]/g, "_");
-    },
+    }
   },
   mounted() {
     const skycons = new Skycons({ color: this.color });
     skycons.set(this.$el, Skycons[this.icon]);
     if (!this.paused) skycons.play();
     this.$emit("load", buildWrapper(skycons));
-  },
+  }
 };
 </script>
