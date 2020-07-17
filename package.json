@@ -2,8 +2,10 @@
   "name": "vue-skycons",
   "version": "1.0.5",
   "description": "Skycons components in VueJS",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "lint": "eslint src",
+    "lint-fix": "eslint --fix src",
     "patch": "npm version patch --no-git-tag-version && git add package.json && git commit -m 'Update version:patch' && git push origin master && npm publish",
     "minor": "npm version minor --no-git-tag-version && git add package.json && git commit -m 'Update version:minor' && git push origin master && npm publish",
     "major": "npm version major --no-git-tag-version && git add package.json && git commit -m 'Update version:major' && git push origin master && npm publish"
@@ -24,5 +26,29 @@
   "bugs": {
     "url": "https://github.com/dipu-bd/skycons/issues"
   },
-  "homepage": "https://github.com/dipu-bd/skycons#readme"
+  "homepage": "https://github.com/dipu-bd/skycons#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-eslint": "~4.4.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.4.0",
+    "eslint-plugin-vue": "^6.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {
+      "no-self-assign": 0
+    }
+  }
 }
