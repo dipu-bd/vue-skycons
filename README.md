@@ -32,11 +32,7 @@ yarn add vue-skycons
 import Vue from "vue";
 import VueSkycons from "vue-skycons";
 
-// Register component
 Vue.use(VueSkycons);
-
-// Register component with a default color
-Vue.use(VueSkycons, { color: "orangered" });
 ```
 
 ### Using Component
@@ -44,7 +40,7 @@ Vue.use(VueSkycons, { color: "orangered" });
 ```vue
 <template>
   <div>
-    <!-- All icons -->
+    <!-- all icons -->
     <skycon condition="clear-day" />
     <skycon condition="clear-night" />
     <skycon condition="partly-cloudy-day" />
@@ -56,8 +52,8 @@ Vue.use(VueSkycons, { color: "orangered" });
     <skycon condition="wind" />
     <skycon condition="fog" />
 
-    <!-- With all attributes -->
-    <skycon condition="rain" size="256" />
+    <!-- all attributes -->
+    <skycon condition="rain" size="128" color="orangered" paused @load="console.log" />
   </div>
 </template>
 
@@ -67,7 +63,7 @@ import Skycon from "vue-skycons/src/Skycon.vue";
 export default {
   components: {
     Skycon
-  },
+  }
 }
 ```
 
