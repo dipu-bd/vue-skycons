@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Skycon from "vue-skycons/src/Skycon.vue";
+import { Skycon } from "vue-skycons";
 
 export default {
   components: {
