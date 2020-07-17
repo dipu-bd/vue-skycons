@@ -3,16 +3,16 @@
     <div>
       <!-- General usage -->
       <h1>All Icons</h1>
-      <skycon condition="clear-day" />
-      <skycon condition="clear-night" />
-      <skycon condition="partly-cloudy-day" />
-      <skycon condition="partly-cloudy-night" />
-      <skycon condition="cloudy" />
-      <skycon condition="rain" />
-      <skycon condition="sleet" />
-      <skycon condition="snow" />
-      <skycon condition="wind" />
-      <skycon condition="fog" />
+      <skycon condition="clear-day" color="#ff9e80" />
+      <skycon condition="clear-night" color="#1e88e5" />
+      <skycon condition="partly-cloudy-day" color="#43a047" />
+      <skycon condition="partly-cloudy-night" color="#607d8b" />
+      <skycon condition="cloudy" color="#ffc107" />
+      <skycon condition="rain" color="#4db6ac" />
+      <skycon condition="sleet" color="#8c9eff" />
+      <skycon condition="snow" color="#ff9e80" />
+      <skycon condition="wind" color="#f48fb1" />
+      <skycon condition="fog" color="#e53935" />
 
       <hr />
 
