@@ -26,13 +26,13 @@ yarn add vue-skycons
 
 ## Examples
 
-### Using Plugin
+### Register Component
 
 ```js
 import Vue from "vue";
-import VueSkycons from "vue-skycons";
+import { Skycon } from "vue-skycons";
 
-Vue.use(VueSkycons);
+Vue.component("skycon", Skycon);
 ```
 
 ### Using Component
