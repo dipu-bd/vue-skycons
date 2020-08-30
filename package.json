@@ -1,14 +1,14 @@
 {
   "name": "vue-skycons",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Skycons components in VueJS",
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint src",
     "lint-fix": "eslint --fix src",
-    "patch": "npm version patch --no-git-tag-version && git add package*.json && git commit -m 'Update version:patch' && git push origin master && npm publish",
-    "minor": "npm version minor --no-git-tag-version && git add package*.json && git commit -m 'Update version:minor' && git push origin master && npm publish",
-    "major": "npm version major --no-git-tag-version && git add package*.json && git commit -m 'Update version:major' && git push origin master && npm publish"
+    "patch": "npm version patch --no-git-tag-version && git add package.json package-lock.json && git commit -m \"Update version:patch\" && git push && npm publish",
+    "minor": "npm version minor --no-git-tag-version && git add package.json package-lock.json && git commit -m \"Update version:minor\" && git push && npm publish",
+    "major": "npm version major --no-git-tag-version && git add package.json package-lock.json && git commit -m \"Update version:major\" && git push && npm publish"
   },
   "repository": {
     "type": "git",
