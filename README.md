@@ -30,7 +30,7 @@ yarn add vue-skycons
 
 ```js
 import Vue from "vue";
-import { Skycon } from "vue-skycons";
+import Skycon from "vue-skycons";
 
 Vue.component("skycon", Skycon);
 ```
@@ -58,7 +58,7 @@ Vue.component("skycon", Skycon);
 </template>
 
 <script>
-import { Skycon } from "vue-skycons";
+import Skycon from "vue-skycons";
 
 export default {
   components: {

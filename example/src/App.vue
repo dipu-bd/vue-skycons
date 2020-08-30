@@ -5,8 +5,16 @@
       <h1>All Icons</h1>
       <skycon condition="clear-day" color="#ff9e80" title="clear-day" />
       <skycon condition="clear-night" color="#1e88e5" title="clear-night" />
-      <skycon condition="partly-cloudy-day" color="#43a047" title="partly-cloudy-day" />
-      <skycon condition="partly-cloudy-night" color="#607d8b" title="partly-cloudy-night" />
+      <skycon
+        condition="partly-cloudy-day"
+        color="#43a047"
+        title="partly-cloudy-day"
+      />
+      <skycon
+        condition="partly-cloudy-night"
+        color="#607d8b"
+        title="partly-cloudy-night"
+      />
       <skycon condition="cloudy" color="#ffc107" title="cloudy" />
       <skycon condition="rain" color="#4db6ac" title="rain" />
       <skycon condition="sleet" color="#8c9eff" title="sleet" />
@@ -30,7 +38,7 @@
 </template>
 
 <script>
-import { Skycon } from "vue-skycons";
+import Skycon from "vue-skycons";
 
 export default {
   components: {
