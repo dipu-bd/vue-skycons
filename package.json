@@ -1,6 +1,6 @@
 {
   "name": "vue-skycons",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Skycons components in VueJS",
   "main": "src/index.js",
   "scripts": {
@@ -29,10 +29,10 @@
   "homepage": "https://github.com/dipu-bd/vue-skycons#readme",
   "dependencies": {},
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-plugin-babel": "^4.5.6",
+    "@vue/cli-plugin-eslint": "^4.5.6",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.4.0",
+    "eslint": "^7.9.0",
     "eslint-plugin-vue": "^6.2.2"
   },
   "eslintConfig": {
