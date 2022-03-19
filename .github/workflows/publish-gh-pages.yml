@@ -25,7 +25,7 @@ jobs:
       - name: Recreating gh-pages
         run: |
           cd example
-          npm ci
+          npm i
           npm run build
           cd dist
           cp -r ../../.git .
@@ -42,4 +42,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           force: true
-          directory: examples/vue/dist
+          directory: example/dist
