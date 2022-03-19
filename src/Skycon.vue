@@ -43,6 +43,12 @@ export default {
     paused: {
       type: Boolean,
       default: false
+    },
+
+    // The animation speed
+    speed: {
+      type: [Number, String],
+      default: 1
     }
   },
   computed: {
@@ -57,7 +63,10 @@ export default {
     }
   },
   mounted() {
-    const skycons = new Skycons({ color: this.color });
+    const skycons = new Skycons({
+      color: this.color,
+      speed: this.speed
+    });
     skycons.set(this.$el, Skycons[this.icon]);
     if (!this.paused) skycons.play();
     this.$emit("load", buildWrapper(skycons));

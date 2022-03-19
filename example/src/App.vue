@@ -30,9 +30,17 @@
 
       <hr />
 
+      <!-- Animation Speed -->
+      <h2>Speed control</h2>
+      <skycon condition="wind" color="#ff9e80" speed="0.5" title="half" />
+      <skycon condition="wind" color="#f48fb1" speed="1" title="normal" />
+      <skycon condition="wind" color="#e53935" speed="2" title="twice" />
+
+      <hr />
+
       <!-- Paused -->
       <h2>Manual control</h2>
-      <skycon condition="snow" size="128" paused @load="onLoad" />
+      <skycon condition="snow" paused @load="onLoad" />
     </div>
   </div>
 </template>

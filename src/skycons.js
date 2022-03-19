@@ -4,7 +4,7 @@
  * GREAT JUSTICE. */
 var requestInterval, cancelInterval;
 
-(function () {
+(function() {
   var raf =
       global.requestAnimationFrame ||
       global.webkitRequestAnimationFrame ||
@@ -19,7 +19,7 @@ var requestInterval, cancelInterval;
       global.msCancelAnimationFrame;
 
   if (raf && caf) {
-    requestInterval = function (fn) {
+    requestInterval = function(fn) {
       var handle = { value: null };
 
       function loop() {
@@ -31,7 +31,7 @@ var requestInterval, cancelInterval;
       return handle;
     };
 
-    cancelInterval = function (handle) {
+    cancelInterval = function(handle) {
       caf(handle.value);
     };
   } else {
@@ -508,7 +508,7 @@ var WIND_PATHS = [
       0.7147,
       0.163,
       0.75,
-      0.18,
+      0.18
     ],
     [
       -0.75,
@@ -574,12 +574,12 @@ var WIND_PATHS = [
       0.6994,
       -0.138,
       0.75,
-      -0.14,
-    ],
+      -0.14
+    ]
   ],
   WIND_OFFSETS = [
     { start: 0.36, end: 0.11 },
-    { start: 0.56, end: 0.16 },
+    { start: 0.56, end: 0.16 }
   ];
 
 function leaf(ctx, t, x, y, cw, s, color) {
@@ -697,14 +697,16 @@ function swoosh(ctx, t, cx, cy, cw, s, index, total, color) {
   }
 }
 
-var Skycons = function (opts) {
+var Skycons = function(opts) {
   this.list = [];
   this.interval = null;
   this.color = opts && opts.color ? opts.color : "black";
   this.resizeClear = !!(opts && opts.resizeClear);
+  this.speed = Number(opts && opts.speed) || 1;
+  if (this.speed < 0) this.speed = 1;
 };
 
-Skycons.CLEAR_DAY = function (ctx, t, color) {
+Skycons.CLEAR_DAY = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -712,7 +714,7 @@ Skycons.CLEAR_DAY = function (ctx, t, color) {
   sun(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
 };
 
-Skycons.CLEAR_NIGHT = function (ctx, t, color) {
+Skycons.CLEAR_NIGHT = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -720,7 +722,7 @@ Skycons.CLEAR_NIGHT = function (ctx, t, color) {
   moon(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
 };
 
-Skycons.PARTLY_CLOUDY_DAY = function (ctx, t, color) {
+Skycons.PARTLY_CLOUDY_DAY = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -729,7 +731,7 @@ Skycons.PARTLY_CLOUDY_DAY = function (ctx, t, color) {
   cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
 };
 
-Skycons.PARTLY_CLOUDY_NIGHT = function (ctx, t, color) {
+Skycons.PARTLY_CLOUDY_NIGHT = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -738,7 +740,7 @@ Skycons.PARTLY_CLOUDY_NIGHT = function (ctx, t, color) {
   cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
 };
 
-Skycons.CLOUDY = function (ctx, t, color) {
+Skycons.CLOUDY = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -746,7 +748,7 @@ Skycons.CLOUDY = function (ctx, t, color) {
   cloud(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
 };
 
-Skycons.RAIN = function (ctx, t, color) {
+Skycons.RAIN = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -755,7 +757,7 @@ Skycons.RAIN = function (ctx, t, color) {
   cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
 };
 
-Skycons.SLEET = function (ctx, t, color) {
+Skycons.SLEET = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -764,7 +766,7 @@ Skycons.SLEET = function (ctx, t, color) {
   cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
 };
 
-Skycons.SNOW = function (ctx, t, color) {
+Skycons.SNOW = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -773,7 +775,7 @@ Skycons.SNOW = function (ctx, t, color) {
   cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
 };
 
-Skycons.WIND = function (ctx, t, color) {
+Skycons.WIND = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h);
@@ -782,7 +784,7 @@ Skycons.WIND = function (ctx, t, color) {
   swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 1, 2, color);
 };
 
-Skycons.FOG = function (ctx, t, color) {
+Skycons.FOG = function(ctx, t, color) {
   var w = ctx.canvas.width,
     h = ctx.canvas.height,
     s = Math.min(w, h),
@@ -810,13 +812,13 @@ Skycons.FOG = function (ctx, t, color) {
 };
 
 Skycons.prototype = {
-  _determineDrawingFunction: function (draw) {
+  _determineDrawingFunction: function(draw) {
     if (typeof draw === "string")
       draw = Skycons[draw.toUpperCase().replace(/-/g, "_")] || null;
 
     return draw;
   },
-  add: function (el, draw) {
+  add: function(el, draw) {
     var obj;
 
     if (typeof el === "string") el = document.getElementById(el);
@@ -832,13 +834,13 @@ Skycons.prototype = {
     obj = {
       element: el,
       context: el.getContext("2d"),
-      drawing: draw,
+      drawing: draw
     };
 
     this.list.push(obj);
     this.draw(obj, KEYFRAME);
   },
-  set: function (el, draw) {
+  set: function(el, draw) {
     var i;
 
     if (typeof el === "string") el = document.getElementById(el);
@@ -852,7 +854,7 @@ Skycons.prototype = {
 
     this.add(el, draw);
   },
-  remove: function (el) {
+  remove: function(el) {
     var i;
 
     if (typeof el === "string") el = document.getElementById(el);
@@ -863,7 +865,7 @@ Skycons.prototype = {
         return;
       }
   },
-  draw: function (obj, time) {
+  draw: function(obj, time) {
     var canvas = obj.context.canvas;
 
     if (this.resizeClear) canvas.width = canvas.width;
@@ -871,23 +873,23 @@ Skycons.prototype = {
 
     obj.drawing(obj.context, time, this.color);
   },
-  play: function () {
+  play: function() {
     var self = this;
 
     this.pause();
-    this.interval = requestInterval(function () {
-      var now = Date.now(),
-        i;
-
-      for (i = self.list.length; i--; ) self.draw(self.list[i], now);
+    this.interval = requestInterval(function() {
+      var now = Date.now() * self.speed;
+      for (var i = self.list.length; i--; ) {
+        self.draw(self.list[i], now);
+      }
     }, 1000 / 60);
   },
-  pause: function () {
+  pause: function() {
     if (this.interval) {
       cancelInterval(this.interval);
       this.interval = null;
     }
-  },
+  }
 };
 
 module.exports = Skycons;

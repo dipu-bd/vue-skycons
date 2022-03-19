@@ -93,6 +93,12 @@ paused: {
   type: Boolean,
   default: false,
 },
+
+// The animation speed
+speed: {
+  type: [Number, String],
+  default: 1
+}
 ```
 
 ### Event example
@@ -114,8 +120,20 @@ export default {
           player.pause();
         }
       }, 1000);
-    },
-  },
+    }
+  }
 };
 </script>
+```
+
+### Animation Speed
+
+The `speed` attributes is a decimal number to control the animation speed. It is a multiplyer to the original speed. `1` means the normal speed. `0.5` means half the normal speed. `2` means twice as fast as the normal speed.
+
+```vue
+<template>
+  <skycon condition="wind" size="128" speed="1" />
+  <skycon condition="wind" size="128" speed="3" />
+  <skycon condition="wind" size="128" speed="0.5" />
+</template>
 ```
