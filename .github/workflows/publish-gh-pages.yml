@@ -24,7 +24,7 @@ jobs:
 
       - name: Recreating gh-pages
         run: |
-          cd examples
+          cd example
           npm ci
           npm run build
           cd dist
