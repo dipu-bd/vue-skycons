@@ -892,4 +892,4 @@ Skycons.prototype = {
   }
 };
 
-module.exports = Skycons;
+export default Skycons;
