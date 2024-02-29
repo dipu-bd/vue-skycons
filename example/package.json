@@ -1,43 +1,26 @@
 {
   "name": "example",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
   },
   "dependencies": {
-    "core-js": "^3.18.1",
-    "vue": "^2.6.14",
+    "vue": "^3.4.15",
     "vue-skycons": "file:../"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^5.0.3",
-    "@vue/cli-plugin-eslint": "^5.0.3",
-    "@vue/cli-service": "^5.0.3",
-    "babel-eslint": "^10.1.0",
-    "eslint": "~7.32.0",
-    "eslint-plugin-vue": "~7.18.0",
-    "vue-template-compiler": "^2.6.14"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "@rushstack/eslint-patch": "^1.3.3",
+    "@vitejs/plugin-vue": "^5.0.3",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "eslint": "^8.49.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "prettier": "^3.0.3",
+    "vite": "^5.0.11"
+  }
 }

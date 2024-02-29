@@ -1,25 +1,23 @@
 "use strict";
 
-/* Set up a RequestAnimationFrame shim so we can animate efficiently FOR
- * GREAT JUSTICE. */
-var requestInterval, cancelInterval;
+let requestInterval, cancelInterval;
+{
+  const raf =
+    global.requestAnimationFrame ||
+    global.webkitRequestAnimationFrame ||
+    global.mozRequestAnimationFrame ||
+    global.oRequestAnimationFrame ||
+    global.msRequestAnimationFrame;
 
-(function() {
-  var raf =
-      global.requestAnimationFrame ||
-      global.webkitRequestAnimationFrame ||
-      global.mozRequestAnimationFrame ||
-      global.oRequestAnimationFrame ||
-      global.msRequestAnimationFrame,
-    caf =
-      global.cancelAnimationFrame ||
-      global.webkitCancelAnimationFrame ||
-      global.mozCancelAnimationFrame ||
-      global.oCancelAnimationFrame ||
-      global.msCancelAnimationFrame;
+  const caf =
+    global.cancelAnimationFrame ||
+    global.webkitCancelAnimationFrame ||
+    global.mozCancelAnimationFrame ||
+    global.oCancelAnimationFrame ||
+    global.msCancelAnimationFrame;
 
   if (raf && caf) {
-    requestInterval = function(fn) {
+    requestInterval = function (fn) {
       var handle = { value: null };
 
       function loop() {
@@ -31,116 +29,19 @@ var requestInterval, cancelInterval;
       return handle;
     };
 
-    cancelInterval = function(handle) {
+    cancelInterval = function (handle) {
       caf(handle.value);
     };
   } else {
     requestInterval = setInterval;
     cancelInterval = clearInterval;
   }
-})();
+}
 
-/* Catmull-rom spline stuffs. */
-/*
-  function upsample(n, spline) {
-    var polyline = [],
-        len = spline.length,
-        bx  = spline[0],
-        by  = spline[1],
-        cx  = spline[2],
-        cy  = spline[3],
-        dx  = spline[4],
-        dy  = spline[5],
-        i, j, ax, ay, px, qx, rx, sx, py, qy, ry, sy, t;
-
-    for(i = 6; i !== spline.length; i += 2) {
-      ax = bx;
-      bx = cx;
-      cx = dx;
-      dx = spline[i    ];
-      px = -0.5 * ax + 1.5 * bx - 1.5 * cx + 0.5 * dx;
-      qx =        ax - 2.5 * bx + 2.0 * cx - 0.5 * dx;
-      rx = -0.5 * ax            + 0.5 * cx           ;
-      sx =                   bx                      ;
-
-      ay = by;
-      by = cy;
-      cy = dy;
-      dy = spline[i + 1];
-      py = -0.5 * ay + 1.5 * by - 1.5 * cy + 0.5 * dy;
-      qy =        ay - 2.5 * by + 2.0 * cy - 0.5 * dy;
-      ry = -0.5 * ay            + 0.5 * cy           ;
-      sy =                   by                      ;
-
-      for(j = 0; j !== n; ++j) {
-        t = j / n;
-
-        polyline.push(
-          ((px * t + qx) * t + rx) * t + sx,
-          ((py * t + qy) * t + ry) * t + sy
-        );
-      }
-    }
-
-    polyline.push(
-      px + qx + rx + sx,
-      py + qy + ry + sy
-    );
-
-    return polyline;
-  }
-
-  function downsample(n, polyline) {
-    var len = 0,
-        i, dx, dy;
-
-    for(i = 2; i !== polyline.length; i += 2) {
-      dx = polyline[i    ] - polyline[i - 2];
-      dy = polyline[i + 1] - polyline[i - 1];
-      len += Math.sqrt(dx * dx + dy * dy);
-    }
-
-    len /= n;
-
-    var small = [],
-        target = len,
-        min = 0,
-        max, t;
-
-    small.push(polyline[0], polyline[1]);
-
-    for(i = 2; i !== polyline.length; i += 2) {
-      dx = polyline[i    ] - polyline[i - 2];
-      dy = polyline[i + 1] - polyline[i - 1];
-      max = min + Math.sqrt(dx * dx + dy * dy);
-
-      if(max > target) {
-        t = (target - min) / (max - min);
-
-        small.push(
-          polyline[i - 2] + dx * t,
-          polyline[i - 1] + dy * t
-        );
-
-        target += len;
-      }
-
-      min = max;
-    }
-
-    small.push(polyline[polyline.length - 2], polyline[polyline.length - 1]);
-
-    return small;
-  }
-  */
-
-/* Define skycon things. */
-/* FIXME: I'm *really really* sorry that this code is so gross. Really, I am.
- * I'll try to clean it up eventually! Promise! */
-var KEYFRAME = 500,
-  STROKE = 0.08,
-  TAU = 2.0 * Math.PI,
-  TWO_OVER_SQRT_2 = 2.0 / Math.sqrt(2);
+let KEYFRAME = 500;
+let STROKE = 0.08;
+let TAU = 2.0 * Math.PI;
+let TWO_OVER_SQRT_2 = 2.0 / Math.sqrt(2);
 
 function circle(ctx, x, y, r) {
   ctx.beginPath();
@@ -347,239 +248,38 @@ function fogbank(ctx, t, cx, cy, cw, s, color) {
   ctx.globalCompositeOperation = "source-over";
 }
 
-/*
-  var WIND_PATHS = [
-        downsample(63, upsample(8, [
-          -1.00, -0.28,
-          -0.75, -0.18,
-          -0.50,  0.12,
-          -0.20,  0.12,
-          -0.04, -0.04,
-          -0.07, -0.18,
-          -0.19, -0.18,
-          -0.23, -0.05,
-          -0.12,  0.11,
-           0.02,  0.16,
-           0.20,  0.15,
-           0.50,  0.07,
-           0.75,  0.18,
-           1.00,  0.28
-        ])),
-        downsample(31, upsample(16, [
-          -1.00, -0.10,
-          -0.75,  0.00,
-          -0.50,  0.10,
-          -0.25,  0.14,
-           0.00,  0.10,
-           0.25,  0.00,
-           0.50, -0.10,
-           0.75, -0.14,
-           1.00, -0.10
-        ]))
-      ];
-  */
-
 var WIND_PATHS = [
     [
-      -0.75,
-      -0.18,
-      -0.7219,
-      -0.1527,
-      -0.6971,
-      -0.1225,
-      -0.6739,
-      -0.091,
-      -0.6516,
-      -0.0588,
-      -0.6298,
-      -0.0262,
-      -0.6083,
-      0.0065,
-      -0.5868,
-      0.0396,
-      -0.5643,
-      0.0731,
-      -0.5372,
-      0.1041,
-      -0.5033,
-      0.1259,
-      -0.4662,
-      0.1406,
-      -0.4275,
-      0.1493,
-      -0.3881,
-      0.153,
-      -0.3487,
-      0.1526,
-      -0.3095,
-      0.1488,
-      -0.2708,
-      0.1421,
-      -0.2319,
-      0.1342,
-      -0.1943,
-      0.1217,
-      -0.16,
-      0.1025,
-      -0.129,
-      0.0785,
-      -0.1012,
-      0.0509,
-      -0.0764,
-      0.0206,
-      -0.0547,
-      -0.012,
-      -0.0378,
-      -0.0472,
-      -0.0324,
-      -0.0857,
-      -0.0389,
-      -0.1241,
-      -0.0546,
-      -0.1599,
-      -0.0814,
-      -0.1876,
-      -0.1193,
-      -0.1964,
-      -0.1582,
-      -0.1935,
-      -0.1931,
-      -0.1769,
-      -0.2157,
-      -0.1453,
-      -0.229,
-      -0.1085,
-      -0.2327,
-      -0.0697,
-      -0.224,
-      -0.0317,
-      -0.2064,
-      0.0033,
-      -0.1853,
-      0.0362,
-      -0.1613,
-      0.0672,
-      -0.135,
-      0.0961,
-      -0.1051,
-      0.1213,
-      -0.0706,
-      0.1397,
-      -0.0332,
-      0.1512,
-      0.0053,
-      0.158,
-      0.0442,
-      0.1624,
-      0.0833,
-      0.1636,
-      0.1224,
-      0.1615,
-      0.1613,
-      0.1565,
-      0.1999,
-      0.15,
-      0.2378,
-      0.1402,
-      0.2749,
-      0.1279,
-      0.3118,
-      0.1147,
-      0.3487,
-      0.1015,
-      0.3858,
-      0.0892,
-      0.4236,
-      0.0787,
-      0.4621,
-      0.0715,
-      0.5012,
-      0.0702,
-      0.5398,
-      0.0766,
-      0.5768,
-      0.089,
-      0.6123,
-      0.1055,
-      0.6466,
-      0.1244,
-      0.6805,
-      0.144,
-      0.7147,
-      0.163,
-      0.75,
-      0.18
+      -0.75, -0.18, -0.7219, -0.1527, -0.6971, -0.1225, -0.6739, -0.091,
+      -0.6516, -0.0588, -0.6298, -0.0262, -0.6083, 0.0065, -0.5868, 0.0396,
+      -0.5643, 0.0731, -0.5372, 0.1041, -0.5033, 0.1259, -0.4662, 0.1406,
+      -0.4275, 0.1493, -0.3881, 0.153, -0.3487, 0.1526, -0.3095, 0.1488,
+      -0.2708, 0.1421, -0.2319, 0.1342, -0.1943, 0.1217, -0.16, 0.1025, -0.129,
+      0.0785, -0.1012, 0.0509, -0.0764, 0.0206, -0.0547, -0.012, -0.0378,
+      -0.0472, -0.0324, -0.0857, -0.0389, -0.1241, -0.0546, -0.1599, -0.0814,
+      -0.1876, -0.1193, -0.1964, -0.1582, -0.1935, -0.1931, -0.1769, -0.2157,
+      -0.1453, -0.229, -0.1085, -0.2327, -0.0697, -0.224, -0.0317, -0.2064,
+      0.0033, -0.1853, 0.0362, -0.1613, 0.0672, -0.135, 0.0961, -0.1051, 0.1213,
+      -0.0706, 0.1397, -0.0332, 0.1512, 0.0053, 0.158, 0.0442, 0.1624, 0.0833,
+      0.1636, 0.1224, 0.1615, 0.1613, 0.1565, 0.1999, 0.15, 0.2378, 0.1402,
+      0.2749, 0.1279, 0.3118, 0.1147, 0.3487, 0.1015, 0.3858, 0.0892, 0.4236,
+      0.0787, 0.4621, 0.0715, 0.5012, 0.0702, 0.5398, 0.0766, 0.5768, 0.089,
+      0.6123, 0.1055, 0.6466, 0.1244, 0.6805, 0.144, 0.7147, 0.163, 0.75, 0.18,
     ],
     [
-      -0.75,
-      0.0,
-      -0.7033,
-      0.0195,
-      -0.6569,
-      0.0399,
-      -0.6104,
-      0.06,
-      -0.5634,
-      0.0789,
-      -0.5155,
-      0.0954,
-      -0.4667,
-      0.1089,
-      -0.4174,
-      0.1206,
-      -0.3676,
-      0.1299,
-      -0.3174,
-      0.1365,
-      -0.2669,
-      0.1398,
-      -0.2162,
-      0.1391,
-      -0.1658,
-      0.1347,
-      -0.1157,
-      0.1271,
-      -0.0661,
-      0.1169,
-      -0.017,
-      0.1046,
-      0.0316,
-      0.0903,
-      0.0791,
-      0.0728,
-      0.1259,
-      0.0534,
-      0.1723,
-      0.0331,
-      0.2188,
-      0.0129,
-      0.2656,
-      -0.0064,
-      0.3122,
-      -0.0263,
-      0.3586,
-      -0.0466,
-      0.4052,
-      -0.0665,
-      0.4525,
-      -0.0847,
-      0.5007,
-      -0.1002,
-      0.5497,
-      -0.113,
-      0.5991,
-      -0.124,
-      0.6491,
-      -0.1325,
-      0.6994,
-      -0.138,
-      0.75,
-      -0.14
-    ]
+      -0.75, 0.0, -0.7033, 0.0195, -0.6569, 0.0399, -0.6104, 0.06, -0.5634,
+      0.0789, -0.5155, 0.0954, -0.4667, 0.1089, -0.4174, 0.1206, -0.3676,
+      0.1299, -0.3174, 0.1365, -0.2669, 0.1398, -0.2162, 0.1391, -0.1658,
+      0.1347, -0.1157, 0.1271, -0.0661, 0.1169, -0.017, 0.1046, 0.0316, 0.0903,
+      0.0791, 0.0728, 0.1259, 0.0534, 0.1723, 0.0331, 0.2188, 0.0129, 0.2656,
+      -0.0064, 0.3122, -0.0263, 0.3586, -0.0466, 0.4052, -0.0665, 0.4525,
+      -0.0847, 0.5007, -0.1002, 0.5497, -0.113, 0.5991, -0.124, 0.6491, -0.1325,
+      0.6994, -0.138, 0.75, -0.14,
+    ],
   ],
   WIND_OFFSETS = [
     { start: 0.36, end: 0.11 },
-    { start: 0.56, end: 0.16 }
+    { start: 0.56, end: 0.16 },
   ];
 
 function leaf(ctx, t, x, y, cw, s, color) {
@@ -697,199 +397,194 @@ function swoosh(ctx, t, cx, cy, cw, s, index, total, color) {
   }
 }
 
-var Skycons = function(opts) {
-  this.list = [];
-  this.interval = null;
-  this.color = opts && opts.color ? opts.color : "black";
-  this.resizeClear = !!(opts && opts.resizeClear);
-  this.speed = Number(opts && opts.speed) || 1;
-  if (this.speed < 0) this.speed = 1;
-};
+export class Skycons {
+  constructor(opts) {
+    this.list = [];
+    this.interval = null;
+    this.color = opts && opts.color ? opts.color : "black";
+    this.resizeClear = !!(opts && opts.resizeClear);
+    this.speed = Number(opts && opts.speed) || 1;
+    if (this.speed < 0) this.speed = 1;
+  }
 
-Skycons.CLEAR_DAY = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
+  static CLEAR_DAY(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    sun(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
+  }
 
-  sun(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
-};
+  static CLEAR_NIGHT(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    moon(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
+  }
 
-Skycons.CLEAR_NIGHT = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
+  static PARTLY_CLOUDY_DAY(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    sun(ctx, t, w * 0.625, h * 0.375, s * 0.75, s * STROKE, color);
+    cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
+  }
 
-  moon(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
-};
+  static PARTLY_CLOUDY_NIGHT(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    moon(ctx, t, w * 0.667, h * 0.375, s * 0.75, s * STROKE, color);
+    cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
+  }
 
-Skycons.PARTLY_CLOUDY_DAY = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
+  static CLOUDY(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    cloud(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
+  }
 
-  sun(ctx, t, w * 0.625, h * 0.375, s * 0.75, s * STROKE, color);
-  cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
-};
+  static RAIN(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    rain(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+    cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+  }
 
-Skycons.PARTLY_CLOUDY_NIGHT = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
+  static SLEET(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    sleet(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+    cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+  }
 
-  moon(ctx, t, w * 0.667, h * 0.375, s * 0.75, s * STROKE, color);
-  cloud(ctx, t, w * 0.375, h * 0.625, s * 0.75, s * STROKE, color);
-};
+  static SNOW(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    snow(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+    cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
+  }
 
-Skycons.CLOUDY = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
+  static WIND(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h);
+    swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 0, 2, color);
+    swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 1, 2, color);
+  }
 
-  cloud(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, color);
-};
+  static FOG(ctx, t, color) {
+    const w = ctx.canvas.width,
+      h = ctx.canvas.height,
+      s = Math.min(w, h),
+      k = s * STROKE;
 
-Skycons.RAIN = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
+    fogbank(ctx, t, w * 0.5, h * 0.32, s * 0.75, k, color);
+    t /= 5000;
 
-  rain(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-  cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-};
+    const a = Math.cos(t * TAU) * s * 0.02,
+      b = Math.cos((t + 0.25) * TAU) * s * 0.02,
+      c = Math.cos((t + 0.5) * TAU) * s * 0.02,
+      d = Math.cos((t + 0.75) * TAU) * s * 0.02,
+      n = h * 0.936,
+      e = Math.floor(n - k * 0.5) + 0.5,
+      f = Math.floor(n - k * 2.5) + 0.5;
 
-Skycons.SLEET = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = k;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
 
-  sleet(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-  cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-};
+    line(ctx, a + w * 0.2 + k * 0.5, e, b + w * 0.8 - k * 0.5, e);
+    line(ctx, c + w * 0.2 + k * 0.5, f, d + w * 0.8 - k * 0.5, f);
+  }
 
-Skycons.SNOW = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
-
-  snow(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-  cloud(ctx, t, w * 0.5, h * 0.37, s * 0.9, s * STROKE, color);
-};
-
-Skycons.WIND = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h);
-
-  swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 0, 2, color);
-  swoosh(ctx, t, w * 0.5, h * 0.5, s, s * STROKE, 1, 2, color);
-};
-
-Skycons.FOG = function(ctx, t, color) {
-  var w = ctx.canvas.width,
-    h = ctx.canvas.height,
-    s = Math.min(w, h),
-    k = s * STROKE;
-
-  fogbank(ctx, t, w * 0.5, h * 0.32, s * 0.75, k, color);
-
-  t /= 5000;
-
-  var a = Math.cos(t * TAU) * s * 0.02,
-    b = Math.cos((t + 0.25) * TAU) * s * 0.02,
-    c = Math.cos((t + 0.5) * TAU) * s * 0.02,
-    d = Math.cos((t + 0.75) * TAU) * s * 0.02,
-    n = h * 0.936,
-    e = Math.floor(n - k * 0.5) + 0.5,
-    f = Math.floor(n - k * 2.5) + 0.5;
-
-  ctx.strokeStyle = color;
-  ctx.lineWidth = k;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-
-  line(ctx, a + w * 0.2 + k * 0.5, e, b + w * 0.8 - k * 0.5, e);
-  line(ctx, c + w * 0.2 + k * 0.5, f, d + w * 0.8 - k * 0.5, f);
-};
-
-Skycons.prototype = {
-  _determineDrawingFunction: function(draw) {
-    if (typeof draw === "string")
+  #determineDrawingFunction = (draw) => {
+    if (typeof draw === "string") {
       draw = Skycons[draw.toUpperCase().replace(/-/g, "_")] || null;
-
+    }
     return draw;
-  },
-  add: function(el, draw) {
-    var obj;
+  };
 
-    if (typeof el === "string") el = document.getElementById(el);
+  add(el, draw) {
+    if (typeof el === "string") {
+      el = document.getElementById(el);
+    }
 
     // Does nothing if canvas name doesn't exists
     if (el === null || el === undefined) return;
 
-    draw = this._determineDrawingFunction(draw);
+    draw = this.#determineDrawingFunction(draw);
 
     // Does nothing if the draw function isn't actually a function
     if (typeof draw !== "function") return;
 
-    obj = {
+    const obj = {
       element: el,
       context: el.getContext("2d"),
-      drawing: draw
+      drawing: draw,
     };
 
     this.list.push(obj);
     this.draw(obj, KEYFRAME);
-  },
-  set: function(el, draw) {
-    var i;
+  }
 
-    if (typeof el === "string") el = document.getElementById(el);
+  set(el, draw) {
+    if (typeof el === "string") {
+      el = document.getElementById(el);
+    }
 
-    for (i = this.list.length; i--; )
+    for (let i = this.list.length; i--; ) {
       if (this.list[i].element === el) {
-        this.list[i].drawing = this._determineDrawingFunction(draw);
+        this.list[i].drawing = this.#determineDrawingFunction(draw);
         this.draw(this.list[i], KEYFRAME);
         return;
       }
+    }
 
     this.add(el, draw);
-  },
-  remove: function(el) {
-    var i;
+  }
 
-    if (typeof el === "string") el = document.getElementById(el);
+  remove(el) {
+    if (typeof el === "string") {
+      el = document.getElementById(el);
+    }
 
-    for (i = this.list.length; i--; )
+    for (let i = this.list.length; i--; ) {
       if (this.list[i].element === el) {
         this.list.splice(i, 1);
         return;
       }
-  },
-  draw: function(obj, time) {
-    var canvas = obj.context.canvas;
+    }
+  }
 
-    if (this.resizeClear) canvas.width = canvas.width;
-    else obj.context.clearRect(0, 0, canvas.width, canvas.height);
-
+  draw(obj, time) {
+    const canvas = obj.context.canvas;
+    if (this.resizeClear) {
+      canvas.width = canvas.width;
+    } else {
+      obj.context.clearRect(0, 0, canvas.width, canvas.height);
+    }
     obj.drawing(obj.context, time, this.color);
-  },
-  play: function() {
-    var self = this;
+  }
 
+  play() {
     this.pause();
-    this.interval = requestInterval(function() {
-      var now = Date.now() * self.speed;
-      for (var i = self.list.length; i--; ) {
-        self.draw(self.list[i], now);
+    this.interval = requestInterval(() => {
+      const now = Date.now() * this.speed;
+      for (let i = this.list.length; i--; ) {
+        this.draw(this.list[i], now);
       }
     }, 1000 / 60);
-  },
-  pause: function() {
+  }
+
+  pause() {
     if (this.interval) {
       cancelInterval(this.interval);
       this.interval = null;
     }
   }
-};
-
-module.exports = Skycons;
+}

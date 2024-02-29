@@ -1,9 +1,10 @@
 <template>
-  <canvas :width="width" :height="height" :data-condition="condition"></canvas>
+  <canvas :width="width" :height="height" :data-condition="condition" />
 </template>
 
 <script>
-import Skycons from "./skycons";
+import { defineComponent } from 'vue';
+import { Skycons } from "./skycons";
 
 function buildWrapper(skycons) {
   const wrapped = {};
@@ -19,7 +20,7 @@ function buildWrapper(skycons) {
   return wrapped;
 }
 
-export default {
+export default defineComponent({
   props: {
     // Weather condition
     condition: {
@@ -71,5 +72,5 @@ export default {
     if (!this.paused) skycons.play();
     this.$emit("load", buildWrapper(skycons));
   }
-};
+});
 </script>
