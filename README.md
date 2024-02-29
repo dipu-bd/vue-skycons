@@ -1,6 +1,5 @@
 # Vue Skycons
 
-[![vue 2x](https://img.shields.io/badge/vuejs-2.x-brightgreen.svg)](https://vuejs.org/)
 [![npm](https://img.shields.io/npm/v/vue-skycons)](http://npmjs.com/package/vue-skycons)
 [![npm download per month](https://img.shields.io/npm/dm/vue-skycons)](http://npmjs.com/package/vue-skycons)
 [![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/vue-skycons?color=red)](https://raw.githubusercontent.com/dipu-bd/vue-skycons/master/package.json)
@@ -120,8 +119,8 @@ export default {
           player.pause();
         }
       }, 1000);
-    }
-  }
+    },
+  },
 };
 </script>
 ```
