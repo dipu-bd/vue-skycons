@@ -29,9 +29,9 @@
   "homepage": "https://github.com/dipu-bd/vue-skycons#readme",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.8",
-    "@babel/eslint-parser": "^7.23.10",
-    "eslint": "~7.32.0",
-    "eslint-plugin-vue": "~7.18.0"
+    "@babel/eslint-parser": "^7.24.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.25.0 "
   },
   "eslintConfig": {
     "root": true,
